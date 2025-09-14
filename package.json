@@ -1,0 +1,8 @@
+{
+  "name": "site-dr-supremo-backend",
+  "version": "1.0.0",
+  "description": "Dependências para a função Netlify",
+  "dependencies": {
+    "node-fetch": "^2.6.1"
+  }
+}
