@@ -1,0 +1,443 @@
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>O Poder Supremo – Reprogramando Sua Vida</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Estilo para o fundo do chat, inspirado no WhatsApp */
+    .wa-bg { background-image: radial-gradient(#e5e5e5 1.2px, transparent 1.2px); background-size: 14px 14px; background-color: #f0f2f5; }
+    /* Estilos para as bolhas de mensagem */
+    .bubble { max-width: 80%; border-radius: 12px; padding: 8px 12px; box-shadow: 0 1px 2px rgba(0,0,0,.1); word-wrap: break-word; }
+    .bubble-user { background:#dcf8c6; margin-left:auto; }
+    .bubble-bot { background:#ffffff; color:#111827; }
+    /* Estilo para o "tick" de mensagem enviada */
+    .tick { font-size:11px; color: #4fc3f7; margin-left: 4px; }
+    /* Animação para o status 'digitando' */
+    @keyframes typing { 0% { opacity: .2; } 20% { opacity: 1; } 100% { opacity: .2; } }
+    .typing-dot { animation: typing 1.4s infinite; }
+    .typing-dot:nth-child(2) { animation-delay: .2s; }
+    .typing-dot:nth-child(3) { animation-delay: .4s; }
+  </style>
+  <!-- Facebook Pixel Code -->
+  <script>
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window, document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '1777549206178175');
+  fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=1777549206178175&ev=PageView&noscript=1"
+  /></noscript>
+  <!-- End Facebook Pixel Code -->
+</head>
+<body class="bg-gray-900 text-white min-h-screen font-sans">
+  <main class="max-w-4xl mx-auto px-4 py-8 md:py-12">
+    <h1 class="text-3xl md:text-4xl font-bold mb-3 text-center text-emerald-400">ATENÇÃO: Este conhecimento não é para todos.</h1>
+    <p class="text-gray-300 mb-8 text-center max-w-2xl mx-auto">A seguir, você terá acesso direto à metodologia do livro <strong>O Poder Supremo</strong> para reprogramar sua vida. Assista ao vídeo com atenção. Após 10 minutos, o acesso ao material será liberado.</p>
+
+    <!-- VSL -->
+    <div class="vsl-container rounded-xl overflow-hidden shadow-2xl shadow-emerald-900/50 mb-8 border-2 border-emerald-800/50">
+      <video id="vsl" class="w-full bg-black aspect-video" playsinline muted preload="metadata"></video>
+    </div>
+
+    <!-- CTA (oculto até 600s) -->
+    <div id="cta-section" class="hidden text-center mt-6 p-6 rounded-xl bg-emerald-900/30 border border-emerald-700/60">
+      <h2 class="text-2xl font-bold mb-4">Acesso Liberado!</h2>
+      <a id="main-checkout-link" target="_blank" rel="noopener" href="#" class="inline-block bg-emerald-600 hover:bg-emerald-700 transition-transform duration-300 transform hover:scale-105 px-8 py-4 rounded-lg font-bold text-lg shadow-lg">QUERO ACESSO COMPLETO AGORA – R$ 47,00</a>
+      <p class="mt-4 text-sm text-gray-300">Ainda tem dúvidas? <a id="ask-expert-link" href="#" class="underline decoration-dotted hover:text-emerald-400">Fale com o Dr. Supremo e receba um diagnóstico.</a></p>
+    </div>
+  </main>
+
+  <!-- Seção de Diagnóstico (aparece com o CTA) -->
+  <section id="diagnosis-section" class="hidden max-w-4xl mx-auto px-4 mb-20">
+    <div class="p-6 rounded-xl bg-gray-800/80 border border-gray-700 backdrop-blur-sm">
+      <h2 class="font-semibold text-xl mb-2 text-emerald-400">Diagnóstico Orientado</h2>
+      <p class="text-gray-300">Identifique sua principal trava: falta de foco, autoconfiança abalada, descontrole emocional ou dificuldade de influência. O Dr. Supremo pode te guiar para o capítulo certo.</p>
+    </div>
+  </section>
+
+  <!-- Chatbot Popup -->
+  <div id="chatbot-container" class="hidden fixed bottom-4 right-4 sm:bottom-6 sm:right-6 w-[380px] max-w-[95vw] h-[550px] max-h-[85vh] flex flex-col rounded-2xl overflow-hidden shadow-2xl bg-white text-gray-900 transition-transform duration-300 transform translate-y-full">
+    <div id="chat-header" class="flex-shrink-0 flex items-center gap-3 px-4 py-2 bg-emerald-800 text-white shadow-md">
+       <div class="relative">
+        <div class="w-10 h-10 rounded-full bg-white/20 grid place-items-center font-bold text-lg">DS</div>
+        <span class="absolute bottom-0 right-0 block h-2.5 w-2.5 rounded-full bg-green-400 ring-2 ring-emerald-800"></span>
+      </div>
+      <div class="flex-1">
+        <h3 class="font-semibold leading-tight">Dr. Supremo</h3>
+        <div id="chat-status" class="text-xs opacity-90 h-4">online</div>
+      </div>
+      <button id="close-chatbot" class="text-3xl leading-none text-white/70 hover:text-white">&times;</button>
+    </div>
+    <div id="chat-window" class="wa-bg flex-1 overflow-y-auto p-4 space-y-3"></div>
+    <div id="chat-input-area" class="flex-shrink-0 flex items-center gap-2 p-3 border-t bg-gray-100">
+      <input id="chat-input" type="text" placeholder="Digite sua mensagem..." class="flex-1 w-full px-4 py-2 rounded-full border bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+      <button id="mic-button" title="Falar" class="p-2 rounded-full hover:bg-gray-200 text-gray-600">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line></svg>
+      </button>
+      <button id="send-chat" title="Enviar" class="hidden p-2 rounded-full bg-emerald-600 text-white hover:bg-emerald-700">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Botão Flutuante do Chat -->
+  <button id="floating-chat-button" class="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 bg-emerald-600 hover:bg-emerald-700 text-white p-4 rounded-full shadow-lg transition-transform duration-300 transform hover:scale-110">
+    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v2"></path><line x1="12" y1="8" x2="12" y2="8"></line><line x1="16" y1="8" x2="16" y2="8"></line><line x1="8" y1="8" x2="8" y2="8"></line></svg>
+  </button>
+
+  <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // ==== Referências do DOM
+    const vsl = document.getElementById('vsl');
+    const ctaSection = document.getElementById('cta-section');
+    const diagnosisSection = document.getElementById('diagnosis-section');
+    const askExpertLink = document.getElementById('ask-expert-link');
+    const chatbotContainer = document.getElementById('chatbot-container');
+    const chatWindow = document.getElementById('chat-window');
+    const chatStatus = document.getElementById('chat-status');
+    const chatInput = document.getElementById('chat-input');
+    const micButton = document.getElementById('mic-button');
+    const sendChat = document.getElementById('send-chat');
+    const closeChatbot = document.getElementById('close-chatbot');
+    const floatingChatButton = document.getElementById('floating-chat-button');
+
+    // ==== Constantes de Negócio e Estado
+    const PIXEL_ID = '1777549206178175';
+    const CAPI_ACCESS_TOKEN = 'EAAShPLQSY4wBPSOaYr22poNwsk4N1mEMmycN2hKDjeLGtibuZBkUM7jqO20TLMFxtUZBmuPlgKR1ZBtqtk2PZBTF4BjKpDH2ZCa8aBLivzZAar46yl4y1vRbJoreYXqpldGORZBSfXwezn29FZBRJIor1cHZAWWhUkQ2KsupQYglE9o1nsYoM9ihsxRxR8fX82AZDZD';
+    const CAPI_TEST_CODE = 'TEST50285';
+    const sessionId = crypto.randomUUID();
+    const vslUrl = 'https://storage.googleapis.com/gemini-prod/v1/2sZ54ow4UKE_360p.mp4';
+    const checkoutUrl = 'https://pay.kiwify.com.br/EQhHnRy';
+    const UNLOCK_TIME = 600; // 10 minutos
+    const EXIT_INTENT_WATCH_TIME = 120; // 2 minutos
+
+    let chatHistory = [];
+    let userName = null;
+    let watchedTotal = 0;
+    let lastPlayTimestamp = null;
+    let exitIntentShown = sessionStorage.getItem('exitIntentShown') === 'true';
+
+    // ==== Lógica do VSL
+    vsl.src = vslUrl;
+    document.getElementById('main-checkout-link').href = checkoutUrl;
+    
+    vsl.addEventListener('canplay', () => {
+      vsl.play().catch(e => console.error("Autoplay bloqueado:", e));
+    });
+
+    vsl.addEventListener('play', () => { lastPlayTimestamp = Date.now(); });
+    vsl.addEventListener('pause', updateWatchedTime);
+    vsl.addEventListener('ended', updateWatchedTime);
+    vsl.addEventListener('timeupdate', checkUnlock);
+
+    vsl.addEventListener('seeking', (e) => {
+      const tolerance = 2; // segundos de tolerância
+      if (vsl.currentTime > watchedTotal + tolerance) {
+        e.preventDefault();
+        vsl.currentTime = Math.max(0, watchedTotal - 1);
+      }
+    });
+
+    function updateWatchedTime() {
+      if (lastPlayTimestamp) {
+        watchedTotal += (Date.now() - lastPlayTimestamp) / 1000;
+        lastPlayTimestamp = null;
+      }
+    }
+
+    function checkUnlock() {
+        if (lastPlayTimestamp) {
+            const currentTotal = watchedTotal + (Date.now() - lastPlayTimestamp) / 1000;
+            if (currentTotal >= UNLOCK_TIME) {
+                if(ctaSection.classList.contains('hidden')) {
+                    ctaSection.classList.remove('hidden');
+                    diagnosisSection.classList.remove('hidden');
+                }
+            }
+        }
+    }
+
+    // ==== Lógica do Exit-intent
+    document.addEventListener('mouseleave', (ev) => {
+      if (!exitIntentShown && watchedTotal >= EXIT_INTENT_WATCH_TIME && ev.clientY <= 0) {
+        exitIntentShown = true;
+        sessionStorage.setItem('exitIntentShown', 'true');
+        openChatbot();
+      }
+    });
+
+    // ==== Lógica do Chat
+    askExpertLink.addEventListener('click', (e) => { e.preventDefault(); openChatbot(); });
+    floatingChatButton.addEventListener('click', openChatbot);
+    closeChatbot.addEventListener('click', closeChat);
+    document.getElementById('main-checkout-link').addEventListener('click', handlePurchase);
+
+    function openChatbot() {
+      chatbotContainer.classList.remove('hidden');
+      requestAnimationFrame(() => {
+         chatbotContainer.classList.remove('translate-y-full');
+      });
+      floatingChatButton.classList.add('hidden');
+      if (chatHistory.length === 0) {
+        addMessage('assistant', 'Olá! Sou o Dr. Supremo, assistente virtual do livro O Poder Supremo. Para deixarmos nossa conversa mais pessoal, como você gostaria de ser chamado(a)?');
+      }
+    }
+
+    function closeChat() {
+      chatbotContainer.classList.add('translate-y-full');
+      setTimeout(() => chatbotContainer.classList.add('hidden'), 300);
+      floatingChatButton.classList.remove('hidden');
+    }
+
+    function addMessage(role, text) {
+      const wrap = document.createElement('div');
+      wrap.className = 'flex w-full';
+      const bubble = document.createElement('div');
+      bubble.className = `bubble ${role === 'user' ? 'bubble-user' : 'bubble-bot'}`;
+      bubble.textContent = text;
+      
+      if (role === 'user') {
+        const tickWrap = document.createElement('div');
+        tickWrap.className = 'flex items-end ml-1';
+        const tick = document.createElement('span');
+        tick.className = 'tick';
+        tick.innerHTML = '&#10003;&#10003;';
+        tickWrap.appendChild(tick);
+        wrap.appendChild(bubble);
+        wrap.appendChild(tickWrap);
+      } else {
+        wrap.appendChild(bubble);
+      }
+      
+      chatWindow.appendChild(wrap);
+      chatWindow.scrollTo({ top: chatWindow.scrollHeight, behavior: 'smooth' });
+    }
+
+    function addPurchaseButtonToChat() {
+      const btn = document.createElement('button');
+      btn.className = 'w-full mt-2 px-4 py-3 rounded-lg bg-emerald-600 text-white font-bold hover:bg-emerald-700 transition-transform transform hover:scale-105';
+      btn.textContent = 'Garantir meu acesso – R$ 47,00';
+      btn.onclick = () => {
+        handlePurchase();
+        window.open(checkoutUrl, '_blank', 'noopener');
+      };
+      chatWindow.appendChild(btn);
+      chatWindow.scrollTo({ top: chatWindow.scrollHeight, behavior: 'smooth' });
+    }
+
+    function setTypingStatus(isTyping) {
+        if(isTyping) {
+            chatStatus.innerHTML = '<div class="flex items-center gap-1 h-full"><span class="typing-dot">.</span><span class="typing-dot">.</span><span class="typing-dot">.</span></div>';
+        } else {
+            chatStatus.textContent = 'online';
+        }
+    }
+
+    function toggleSendButton() {
+      const hasText = chatInput.value.trim().length > 0;
+      sendChat.classList.toggle('hidden', !hasText);
+      micButton.classList.toggle('hidden', hasText);
+    }
+    chatInput.addEventListener('input', toggleSendButton);
+
+    function sendMessage() {
+      const text = chatInput.value.trim();
+      if (!text) return;
+      addMessage('user', text);
+      chatInput.value = '';
+      toggleSendButton();
+      handleUserMessage(text);
+    }
+    chatInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); sendMessage(); } });
+    sendChat.addEventListener('click', sendMessage);
+
+    // ==== Lógica de Voz (webkitSpeechRecognition)
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    let recognition = null;
+    let isRecognizing = false;
+
+    if (SpeechRecognition) {
+      recognition = new SpeechRecognition();
+      recognition.lang = 'pt-BR';
+      recognition.interimResults = false;
+
+      recognition.onstart = () => {
+        isRecognizing = true;
+        chatStatus.textContent = 'Ouvindo...';
+      };
+
+      recognition.onresult = (e) => {
+        chatInput.value = e.results[0][0].transcript;
+        toggleSendButton();
+      };
+
+      recognition.onerror = (e) => {
+        console.error('Erro no reconhecimento de voz:', e);
+        if (e.error !== 'no-speech' && e.error !== 'aborted') {
+             addMessage('assistant', 'Não consegui captar sua voz. Você pode digitar, por favor?');
+        }
+      };
+      
+      recognition.onend = () => {
+        isRecognizing = false;
+        if (chatStatus.textContent === 'Ouvindo...') {
+            chatStatus.textContent = 'online';
+        }
+      };
+    }
+    
+    micButton.addEventListener('click', () => {
+      if (recognition && !isRecognizing) {
+        try {
+          recognition.start();
+        } catch (e) {
+          console.error("Erro ao iniciar reconhecimento:", e);
+          isRecognizing = false;
+        }
+      } else if (!recognition) {
+        alert('Seu navegador não suporta reconhecimento de voz.');
+      }
+    });
+
+    async function handleUserMessage(text) {
+      chatHistory.push({ role: 'user', text });
+      
+      setTypingStatus(true);
+      try {
+        const responseText = await callChatAPI(chatHistory, userName);
+
+        if (!userName) {
+            const nameMatch = responseText.match(/Bem-vindo\(a\),\s*([^\s!,.?]+)/i);
+            if (nameMatch && nameMatch[1]) {
+                userName = nameMatch[1];
+            } else {
+                // Fallback caso a IA não consiga extrair o nome
+                userName = "Amigo(a)"; 
+            }
+        }
+
+        const parts = responseText.split(/\n\s*\n/).map(s => s.trim()).filter(Boolean).slice(0, 3);
+
+        for (const p of parts) {
+          if (p === '[PURCHASE_BUTTON]') {
+            addPurchaseButtonToChat();
+            chatHistory.push({role: 'assistant', text: p});
+          } else {
+            await new Promise(r => setTimeout(r, 1200 + Math.random() * 500));
+            addMessage('assistant', p);
+            chatHistory.push({ role: 'assistant', text: p });
+          }
+        }
+      } catch (err) {
+        console.error("API Error:", err);
+        addMessage('assistant', 'Tive um pico de demanda agora e não consegui processar. Podemos tentar de novo ou posso te guiar por um exercício curto do Cap. 1?');
+        chatHistory.pop(); // Remove a última mensagem do usuário do histórico se a API falhar
+      } finally {
+        setTypingStatus(false);
+      }
+    }
+
+    // --- FUNÇÕES DE RASTREAMENTO ---
+    function handlePurchase() {
+        console.log('Evento de Compra acionado');
+        fbq('track', 'Purchase', { currency: 'BRL', value: 47.00 });
+        sendServerPurchaseEvent();
+    }
+
+    async function sendServerPurchaseEvent() {
+        // Esta função está aqui para manter a compatibilidade, mas em produção
+        // ela deve ser chamada a partir do back-end para segurança.
+        console.log("Simulando envio de evento CAPI. Em produção, isso deve ser feito no servidor.");
+    }
+
+    // --- LÓGICA DA IA (INTEGRADA NO FRONT-END PARA TESTES) ---
+    function buildSystemInstruction(userName) {
+        // Se o nome não existe, usa a instrução para extrair o nome.
+        if (!userName) {
+            return `Você é o Assistente Virtual ‘Dr. Supremo’. O usuário está respondendo à sua primeira pergunta: "Como você gostaria de ser chamado(a)?".
+Sua ÚNICA tarefa agora é:
+1. Extrair o primeiro nome do usuário do texto que ele enviou (ex: de "me chamo Fabrício", extraia "Fabrício").
+2. Responder IMEDIATAMENTE e APENAS com a seguinte frase, usando o nome extraído: "Bem-vindo(a), [Nome Extraído]! Fico feliz em ajudar. Para começarmos, qual sua principal dor ou o que mais te impede de avançar hoje? Pode ser foco, autoconfiança, controle emocional ou relacionamentos."
+NÃO adicione nenhuma outra palavra, saudação ou comentário. Sua resposta deve ser exclusivamente a frase acima.`;
+        }
+
+        // Se o nome já existe, usa a instrução padrão.
+        return `Você é o Assistente Virtual ‘Dr. Supremo’ (IA). Baseie todas as respostas exclusivamente no livro ‘O Poder Supremo’. Sua missão é diagnosticar a dor do(a) ${userName}, oferecer micro‑insights práticos do livro e conduzir com ética para a aquisição do e‑book (R$ 47,00, checkout https://pay.kiwify.com.br/EQhHnRy).
+Regras estritas:
+1. Chame o usuário pelo primeiro nome (${userName}). Use português do Brasil (pt-BR).
+2. Formato de Resposta OBRIGATÓRIO: 2 a 3 mensagens curtas por turno, separadas por uma linha em branco. Cada mensagem deve ter no máximo 280 caracteres.
+3. SEMPRE termine sua última mensagem com uma pergunta para manter o diálogo ativo.
+4. Cite capítulos do livro sutilmente ao dar um insight (ex: "No Cap. 1 - Auto Persuasão, abordamos isso..."). NÃO invente conteúdo. Se algo não estiver no livro, admita a limitação.
+5. Sem promessas garantidas, resultados milagrosos ou conselhos clínicos/financeiros. Mantenha um tom humano, empático e encorajador.
+6. Quando o usuário mostrar intenção de compra ("quero começar", "onde compro", "faz sentido", "quanto custa?"), insira em uma linha completamente isolada: [PURCHASE_BUTTON]. NENHUM outro texto deve estar nessa linha.
+Mapeamento de Dores -> Capítulos:
+- Falta de confiança/foco/autossabotagem: Cap. 1 (Auto Persuasão), Cap. 2 (Subconsciente).
+- Controle emocional/ansiedade: Cap. 8 (Controle Emocional).
+- Influência/relacionamentos/persuasão: Cap. 7 (Influência Social), Cap. 4 (Insinuação).
+- Mudança de vida/visão de futuro: Cap. 10 (Manipulando o Futuro).
+- Comunicação não verbal: Cap. 6.
+- PNL/linguagem: Cap. 5.`;
+    }
+
+    async function callChatAPI(history, currentUserName) {
+        // ATENÇÃO: A chave da API está exposta aqui para que o código funcione neste ambiente de teste.
+        // Em um site real (produção), use o método de back-end (Netlify Function) para proteger a chave.
+        const apiKey = 'AIzaSyCDzeMtSUyKlwhYCWeDDGnRWQvfIW3VrQA';
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`;
+
+        const systemInstruction = buildSystemInstruction(currentUserName);
+        
+        const contents = history.map(m => ({
+            role: m.role === 'assistant' ? 'model' : 'user',
+            parts: [{ text: m.text }],
+        }));
+
+        const payload = {
+            contents,
+            systemInstruction: {
+                role: 'system',
+                parts: [{ text: systemInstruction }],
+            },
+            generationConfig: {
+                temperature: currentUserName ? 0.6 : 0.2,
+                topP: 0.9,
+                topK: 40,
+                maxOutputTokens: 400,
+            },
+            safetySettings: [
+                { category: 'HARM_CATEGORY_HATE_SPEECH', threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
+                { category: 'HARM_CATEGORY_DANGEROUS_CONTENT', threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
+                { category: 'HARM_CATEGORY_HARASSMENT', threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
+                { category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT', threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
+            ]
+        };
+        
+        const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+
+        if (!response.ok) {
+            console.error("Gemini API Error Response:", await response.text());
+            throw new Error(`API Error: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        const parts = data?.candidates?.[0]?.content?.parts || [];
+        const text = parts.map((p) => p.text || '').join('\n');
+        
+        return text;
+    }
+  });
+  </script>
+</body>
+</html>
+
